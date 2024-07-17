@@ -62,19 +62,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private int calcReports(Employee e){
         int numberOfReports= 0;
-        //Because employee objects without reports have NULL instead of an empty list, size needs to be used as a checker
-        int size = 0;
+
+        assert employeeRepository != null;
+
         if(e.getDirectReports() != null ){
-            System.out.println(e.getFirstName());
             numberOfReports += 1;
             for(int i = 0; i < e.getDirectReports().size(); i++ ){
-                assert employeeRepository != null;
                 numberOfReports += calcReports(employeeRepository.findByEmployeeId(e.getDirectReports().get(i).getEmployeeId()));
             }
         }else{
             numberOfReports += 1;
         }
-
         return numberOfReports;
     }
 }
