@@ -13,4 +13,9 @@ public class ChallengeApplicationTests {
 	public void contextLoads() {
 	}
 
+
+	@Test
+	public void testReportingStructure(){
+
+	}
 }

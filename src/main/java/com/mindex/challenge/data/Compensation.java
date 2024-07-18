@@ -4,14 +4,16 @@ import java.util.Date;
 
 public class Compensation {
     private Employee employee = new Employee();
-    private double salary = 0 ;
+    private String compensationId;
+    private Double salary = 0.0;
     private Date effectiveDate = new Date();
 
 
-    public Compensation(Employee e,double s, Date effDate){
-        this.employee = e;
-        this.salary = s;
-        this.effectiveDate = effDate;
+    public Compensation(Employee employee,Double salary, Date effectiveDate){
+        this.employee = employee;
+        this.compensationId = employee.getEmployeeId();
+        this.salary = salary;
+        this.effectiveDate = effectiveDate;
     }
 
     public Employee getEmployee() {
@@ -22,11 +24,19 @@ public class Compensation {
         this.employee = employee;
     }
 
-    public double getSalary() {
+    public String getCompensationId() {
+        return compensationId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.compensationId = compensationId;
+    }
+
+    public Double getSalary() {
         return salary;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(Double salary) {
         this.salary = salary;
     }
 

@@ -1,6 +1,7 @@
 package com.mindex.challenge.controller;
 
 import com.mindex.challenge.data.Compensation;
+import com.mindex.challenge.data.CompensationRequest;
 import com.mindex.challenge.data.Employee;
 import com.mindex.challenge.data.ReportingStructure;
 import com.mindex.challenge.service.EmployeeService;
@@ -8,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 public class EmployeeController {
@@ -46,16 +49,20 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee/{id}/compensation")
-    public Compensation createCompensation(@PathVariable String id) {
-        LOG.debug("Received employee compensation creation request for id [{}]", id);
+    public Compensation createCompensation(@PathVariable String id,
+                                           @RequestBody CompensationRequest compensationRequest ){
 
-        return null;
+        Double salary = compensationRequest.getSalary();
+        Date effectiveDate = compensationRequest.getEffectiveDate();
+        LOG.debug("Received compensation creation request for id [{}], with salary [{}], and effective date [{}]", id,salary,effectiveDate);
+
+        return employeeService.createCompensation(id,salary,effectiveDate);
     }
 
     @GetMapping("/employee/{id}/compensation")
-    public ReportingStructure viewCompensation(@PathVariable String id) {
+    public Compensation viewCompensation(@PathVariable String id) {
         LOG.debug("Received employee report structure get request for id [{}]", id);
 
-        return null;
+        return employeeService.viewCompensation(id);
     }
 }
