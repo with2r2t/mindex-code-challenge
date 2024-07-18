@@ -75,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Compensation compensation = compensationRepository.findByCompensationId(id);
 
         if (compensation == null) {
-            throw new RuntimeException("Invalid compensationId: " + id);
+            throw new RuntimeException("No compensation data found for id " + id);
         }
 
         return compensation;
