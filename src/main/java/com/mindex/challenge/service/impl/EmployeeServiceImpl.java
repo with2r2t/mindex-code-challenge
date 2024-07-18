@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -55,17 +56,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public ReportingStructure repStruct(String id){
+    public ReportingStructure repStruct(String id) {
         LOG.debug("creating employee structure for [{}]", id);
 
         Employee employee = employeeRepository.findByEmployeeId(id);
         ReportingStructure rs = new ReportingStructure(employee);
-        //Quick and dirty solution, current counts employee added so need to subtract that. Would love to call from inside the object class
-        //but Autowiring isn't allowing me to use the repository which is needed.
-        rs.setNumberOfReports(calcReports(employee)-1);
+        if (employee.getDirectReports() != null) {
+            rs.setNumberOfReports(calcReports(employee.getDirectReports()));
+        }
         return rs;
 
     }
+
     @Override
     public Compensation viewCompensation(String id) {
         LOG.debug("viewing compensation for id [{}]", id);
@@ -78,29 +80,35 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return compensation;
     }
+
     @Override
-    public Compensation createCompensation(String id, Double salary, Date effectiveDate){
+    public Compensation createCompensation(String id, Double salary, Date effectiveDate) {
         LOG.debug("Creating compensation for id [{}]", id);
 
-        Compensation compensation = new Compensation(employeeRepository.findByEmployeeId(id),salary,effectiveDate);
-        System.out.println("id is" + compensation.getCompensationId());
+        Compensation compensation = new Compensation(employeeRepository.findByEmployeeId(id), salary, effectiveDate);
         compensationRepository.insert(compensation);
 
         return compensation;
     }
 
-    private int calcReports(Employee e){
-        int numberOfReports= 0;
-
+    //Method to calculate number of reports an employee has
+    //
+    //Would have liked to have made it a member function of ReportingStructure but unfamiliarity with MongoDB led to me not knowing how to
+    //make the employeeRepository accessible in the ReportingStructure class.
+    private int calcReports(List<Employee> reports) {
+        int numberOfReports = 0;
         assert employeeRepository != null;
 
-        if(e.getDirectReports() != null ){
-            numberOfReports += 1;
-            for(int i = 0; i < e.getDirectReports().size(); i++ ){
-                numberOfReports += calcReports(employeeRepository.findByEmployeeId(e.getDirectReports().get(i).getEmployeeId()));
+        for (Employee report : reports) {
+
+            report = employeeRepository.findByEmployeeId(report.getEmployeeId());
+
+            if (report.getDirectReports() != null) {
+                numberOfReports += 1;
+                numberOfReports += calcReports(report.getDirectReports());
+            } else {
+                numberOfReports += 1;
             }
-        }else{
-            numberOfReports += 1;
         }
         return numberOfReports;
     }
