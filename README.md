@@ -2,7 +2,7 @@
 
 ## My Comments:
 The coding challenge was a relatively simple but fun springboot usecase. I found it fun because although I've been working with relational DBs for 5 years(Mostly Oracle), I had never worked with MongoDB or Mongo Repositories before, so it was both a way to flex what I do know with regards to 
-springboot and java in general, but also to learn at least a little bit of a new DB technology. I treated this as I would an agile story with the instructions included as acceptance criteria. I also included a postman collection for easy testing.
+springboot and java in general, but also to learn at least a little bit of a new DB technology. I treated this as I would an agile story with the instructions included as acceptance criteria. I also included a postman collection for easy testing under the postmancollections folder.
 
 ## Problem 1
 For problem 1, I used a recursive solution that counts up all reports in the list, and feeds back into the function any reports that have a list of direct reports themselves, continuing to recurse until a node with all direct reports not having direct reports is found. 
